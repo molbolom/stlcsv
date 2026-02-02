@@ -4,7 +4,7 @@
 import csv
 import os
 import numpy
-import matplotlib.pyplot as plot
+import matplotlib.pyplot as plotter
 from operator import itemgetter, attrgetter
 
 
@@ -40,6 +40,7 @@ class stlcsv:
 
     SCATTER_PLOT = 0b1
 
+    plot_data = []
 
 ################
 #
@@ -161,6 +162,7 @@ class stlcsv:
     def print_settings(self):
         print("File name        : ", self.filename)
         print("Records stored   : ", len(self.data))
+        print("Plot data        : ", len(self.plot_data))
         print("Board dimensions : ", f"{self.boardxy[0]}x{self.boardxy[1]}")
         print("Game delemiter   : ", self.delem)
         print(f"Prompt           : \"{self.prompt}\"")
@@ -185,7 +187,16 @@ class stlcsv:
 
 
     @classmethod
-    def plot_data(self, method = 0b1):
+    def plot(self, method = 0b1):
+
+        if self.plot_data != []:
+            C = numpy.array([ i for i in range(len(self.plot_data)) ])
+
+            plotter.scatter(C, self.plot_data)
+
+            plotter.show()
+            return()
+
         D = [[],[],[]]
         for d in self.data:
             D[0].append(d["contig"])
@@ -195,12 +206,12 @@ class stlcsv:
 
         C = numpy.array([ i for i in range(len(D[0])) ])
 
-        plot.scatter(C, D[0], color='r', s = 50)
-        plot.scatter(C, D[1], color='g', s = 50)
-        plot.scatter(C, D[2], color='b', s = 10)
-        plot.xticks(rotation = 25)
+        plotter.scatter(C, D[0], color='r', s = 50)
+        plotter.scatter(C, D[1], color='g', s = 50)
+        plotter.scatter(C, D[2], color='b', s = 10)
+        plotter.xticks(rotation = 25)
 
-        plot.show()
+        plotter.show()
 
 
 
@@ -219,6 +230,7 @@ class stlcsv:
               "help                         This help.\n",
               "quit                         Quit the program.\n",
               "plot                         Plot the current stored data.\n",
+              "     eval [python string for plot_data]    Set the data that will be plotted.\n",
               "sort                         Sort via the third element.\n",
               "     fieldname               Sort via field name.\n",
               "read [[fa, a], [fb,a,b]... ] Read data from file with fields equal to integers.\n",
@@ -290,7 +302,18 @@ class stlcsv:
         elif s[:4] == "quit":
             quit()
         elif s[:4] == "plot":
-            self.plot_data()
+            s = s[5:]
+            if s[:4] == "eval":
+                s = s[5:]
+                try:
+                    s = s.replace("PLOTDATA", "stlcsv.plot_data")
+                    s = s.replace("DATA", "stlcsv.data")
+                    self.plot_data = eval(s)
+                except:
+                    self.ErrorMessage(f"Error in string \"{s}\"")
+
+            else:
+                self.plot()
 
         elif s[:4] == "sort":
             s = s[5:]
@@ -304,6 +327,15 @@ class stlcsv:
                         break
                 if c == True:
                     self.data.sort(key = itemgetter(s))
+        elif s[:4] == "exec":
+            s = s[5:]
+            try:
+
+                s = s.replace("PLOTDATA", "stlcsv.plot_data")
+                s = s.replace("DATA", "stlcsv.data")
+                exec(s)
+            except:
+                self.ErrorMessage(f"Error in string \"{s}\"")
             
         elif s[:5] == "print":
             s = s[6:]
