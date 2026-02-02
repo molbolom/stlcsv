@@ -35,6 +35,12 @@ class stlcsv:
             # a person can enter it easier from the prompt.
     delem = "/"
 
+    plotattr = [ ({"color":"#FF0000", "size":20}),      # Red
+                 ({"color":"#FF8A00", "size":50}),      # Orange
+                 ({"color":"#0000FF", "size":40}),      # Blue
+                 ({"color":"#CB00FF", "size":30}),      # Purple
+                 ({"color":"#009A09", "size":30}) ]     # Green
+
 
 #   Plot types for plot_data
 
@@ -172,6 +178,10 @@ class stlcsv:
                 print(f"Fields           :: {self.fieldnames[x]}")
             else:
                 print(f"                 :: {self.fieldnames[x]}")
+        print("Plot attributes   :")
+        for x in range(len(self.plotattr)):
+            print(f"  {x}            : color = {self.plotattr[x]['color']}  size = {self.plotattr[x]['size']}")
+            
 
 ################
 #
@@ -190,9 +200,17 @@ class stlcsv:
     def plot(self, method = 0b1):
 
         if self.plot_data != []:
-            C = numpy.array([ i for i in range(len(self.plot_data)) ])
 
-            plotter.scatter(C, self.plot_data)
+            for x in range(len(self.plot_data)):
+            
+                pdlen = len(self.plot_data[x])
+
+                if x < len(self.plotattr):          # Make sure to stop reading attributes once the end is reached.
+                    attrn = x 
+
+                C = numpy.array([ i for i in range(pdlen) ])
+
+                plotter.scatter(C, self.plot_data[x], c = self.plotattr[attrn]['color'], s = self.plotattr[attrn]['size'])
 
             plotter.show()
             return()
@@ -308,7 +326,7 @@ class stlcsv:
                 try:
                     s = s.replace("PLOTDATA", "stlcsv.plot_data")
                     s = s.replace("DATA", "stlcsv.data")
-                    self.plot_data = eval(s)
+                    self.plot_data.append(eval(s))
                 except:
                     self.ErrorMessage(f"Error in string \"{s}\"")
 
