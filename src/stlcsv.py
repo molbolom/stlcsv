@@ -252,6 +252,7 @@ class stlcsv:
               "sort                         Sort via the third element.\n",
               "     fieldname               Sort via field name.\n",
               "read [[fa, a], [fb,a,b]... ] Read data from file with fields equal to integers.\n",
+              "exec [python string]         Execute python code. (Temporary function until I get more done).\n",
               "print                        Print data for viewing.\n",
               "      data                   Print the complete stored data\n",
               "      games                  Prints the total games stored int the file.\n",
@@ -347,13 +348,22 @@ class stlcsv:
                     self.data.sort(key = itemgetter(s))
         elif s[:4] == "exec":
             s = s[5:]
-            try:
+            if s[:4] == "file":
+                s = s[5:]
+                try:
+                    with open(s) as execfile:
+                        exec(execfile.read())
+                except:
+                    self.ErrorMessage(f"Error, can not read or execute file {s}.")
 
-                s = s.replace("PLOTDATA", "stlcsv.plot_data")
-                s = s.replace("DATA", "stlcsv.data")
-                exec(s)
-            except:
-                self.ErrorMessage(f"Error in string \"{s}\"")
+            else:
+                try:
+
+                    s = s.replace("PLOTDATA", "stlcsv.plot_data")
+                    s = s.replace("DATA", "stlcsv.data")
+                    exec(s)
+                except:
+                    self.ErrorMessage(f"Error in string \"{s}\"")
             
         elif s[:5] == "print":
             s = s[6:]
