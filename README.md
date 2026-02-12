@@ -20,10 +20,15 @@ How to use the program.
 
 
 Below is one puzzle after it has been solved.
+
+
 <img src="./images/12x6_solved_view.png" alt="Solved loopy puzzle with width 12 and height 6." width="400" />
+
 
 The next two images show the longest contiguous series of boxes and the noncontiguous set of boxes.
 
-<img src="./imgages/12x6_contiguous_view.png" alt="Longest contiguous series of boxes." width="400" />
 
-<img src="./imgages/12x6_noncontiguous_view.png" alt="Longest contiguous series of boxes." width="400" />
+<img src="./images/12x6_contiguous_view.png" alt="Longest contiguous series of boxes." width="400" />
+
+
+<img src="./images/12x6_noncontiguous_view.png" alt="Longest contiguous series of boxes." width="400" />
