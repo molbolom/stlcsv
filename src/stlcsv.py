@@ -120,16 +120,17 @@ class stlcsv:
                     for row in reader:
                         c = False
                         for y in range(len(D)):
-                            if (row[self.fieldnames[0]] == D[y][self.fieldnames[0]]) and (row[self.fieldnames[1]] == D[y][self.fieldnames[1]]):
+                            if (row[self.fieldnames[0]] == D[y][0]) and (row[self.fieldnames[1]] == D[y][1]):
+                                D[y][2] += 1
                                 c = True
                                 break 
                         if c == False:
                             x+=1
-                            D.append(row)
+                            D.append([ int(row[self.fieldnames[0]]), int(row[self.fieldnames[1]]), 1])
 
                     print(f"\nGame data stored in {self.filename}.")
                     for d in D:
-                        print(f"{int(d[self.fieldnames[0]])}x{int(d[self.fieldnames[1]])}") 
+                        print(f"{d[2]:3} : {d[0]}x{d[1]}") 
 
                     return(x)       # Returns the number of games in file.
 
