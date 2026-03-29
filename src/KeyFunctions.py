@@ -10,9 +10,11 @@
 #   [ 
 
 
-class KeyFunctions:
+class KeyFunctions():
 
     keywords = []
+
+    Default = None
 
 #
 #   exec_keyword( key list )
@@ -23,16 +25,23 @@ class KeyFunctions:
     @classmethod
     def exec_keyword(self, kws):
         f = self.get_keyword(kws)
-        if kws[0] == f[1][0]:
-            print(f"Keyword \"{kws[0]}\" not found.")
-            return()
+
+        if f[1] != []:
+            if kws[0] == f[1][0]:
+                if self.Default == None:
+                    print(f"Keyword \"{kws[0]}\" not found.")
+                else:
+                    self.default(kws)
+                return()
             
         if f[0][1] == None:
             print(f"Can not execute \"{f[0][0]}({f[1]})\".")
             return()
 
-
-        f[0][1](f[1])
+        if f[1] == []:
+            f[0][1]()
+        else:
+            f[0][1](f[1])
 
 
 #
@@ -85,55 +94,4 @@ class KeyFunctions:
 
         return([retkw, kws[p+1:]])
 
-
-class test_funcs:
-
-    @staticmethod
-    def FuncA( L ):
-        print(f"FuncA with arguments {L}.")
-
-    @staticmethod
-    def FuncB( L ):
-        print(f"FuncB with arguments {L}.")
-    
-    @staticmethod
-    def FuncC( L ):
-        print(f"FuncC with arguments {L}.")
-        
-    
-    @staticmethod
-    def FuncD( L ):
-        print(f"FuncD with arguments {L}.")
-        
-    
-    @staticmethod
-    def FuncE( L ):
-        print(f"FuncE with arguments {L}.")
-        
-    
-    @staticmethod
-    def FuncF( L ):
-        print(f"FuncF with arguments {L}.")
-        
-    @staticmethod
-    def FuncG( L ):
-        print(f"FuncG with arguments {L}.")
-
-
-
-KeyFunctions.new_keyword(["FuncA"], test_funcs.FuncA)
-KeyFunctions.new_keyword(["FuncB"], test_funcs.FuncB)
-KeyFunctions.new_keyword(["FuncC"], test_funcs.FuncC)
-KeyFunctions.new_keyword(["FuncD"], test_funcs.FuncD)
-KeyFunctions.new_keyword(["FuncE"], test_funcs.FuncE)
-KeyFunctions.new_keyword(["FuncF"], test_funcs.FuncF)
-KeyFunctions.new_keyword(["FuncG"], test_funcs.FuncG)
-
-
-while True:
-    C = input("Input: ")
-    if C == "quit":
-        break
-
-    KeyFunctions.exec_keyword(C.split())
 
